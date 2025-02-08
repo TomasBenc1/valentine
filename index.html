@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chytání srdíčka</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #ffe6e6;
+            overflow: hidden;
+            transition: background 1s;
+        }
+        .game-container {
+            position: relative;
+            width: 80vw;
+            height: 80vh;
+            margin: auto;
+            border: 3px solid red;
+            border-radius: 15px;
+            background-color: #fff5f5;
+            overflow: hidden;
+        }
+        .heart {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            background: red;
+            clip-path: path("M 25 5 C 35 -5, 55 5, 50 20 C 45 35, 25 50, 25 50 C 25 50, 5 35, 0 20 C -5 5, 15 -5, 25 5 Z");
+            cursor: pointer;
+        }
+        #score {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        #valentine-message {
+            display: none;
+            font-size: 30px;
+            font-weight: bold;
+            color: white;
+            position: absolute;
+            top: 40%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        #buttons {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        .btn {
+            font-size: 20px;
+            padding: 10px 20px;
+            margin: 10px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+        }
+        .btn-yes {
+            background-color: green;
+            color: white;
+        }
+        .btn-no {
+            background-color: red;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h2 id="game-title">Chytání srdíčka ❤️</h2>
+    <p id="instructions">Chyť co nejvíce srdíček!</p>
+    <p id="score">Skóre: 0</p>
+    <div class="game-container" id="gameContainer"></div>
+    <p id="valentine-message">Will you be my Valentine? ❤️</p>
+    <div id="buttons">
+        <button class="btn btn-yes" onclick="showLoveMessage()">Ano</button>
+        <button class="btn btn-no" onmouseover="trickNoButton()">Ne</button>
+    </div>
+    <p id="love-message" style="display: none; font-size: 30px; font-weight: bold; color: white;">Miluju tě! ❤️</p>
+    
+    <script>
+        let score = 0;
+        function spawnHeart() {
+            if (score >= 20) {
+                document.body.style.backgroundColor = "#ff4d4d";
+                document.getElementById("gameContainer").style.display = "none";
+                document.getElementById("game-title").style.display = "none";
+                document.getElementById("instructions").style.display = "none";
+                document.getElementById("score").style.display = "none";
+                document.getElementById("valentine-message").style.display = "block";
+                document.getElementById("buttons").style.display = "block";
+                return;
+            }
+            const heart = document.createElement("div");
+            heart.classList.add("heart");
+            const gameContainer = document.getElementById("gameContainer");
+            heart.style.top = Math.random() * (gameContainer.clientHeight - 50) + "px";
+            heart.style.left = Math.random() * (gameContainer.clientWidth - 50) + "px";
+            heart.onclick = () => {
+                score++;
+                document.getElementById("score").textContent = `Skóre: ${score}`;
+                heart.remove();
+                spawnHeart();
+            };
+            gameContainer.appendChild(heart);
+        }
+
+        function showLoveMessage() {
+            document.getElementById("valentine-message").style.display = "none";
+            document.getElementById("buttons").style.display = "none";
+            document.getElementById("love-message").style.display = "block";
+        }
+
+        function trickNoButton() {
+            const noButton = document.querySelector(".btn-no");
+            noButton.textContent = "Ano";
+            noButton.classList.remove("btn-no");
+            noButton.classList.add("btn-yes");
+            noButton.onclick = showLoveMessage;
+        }
+
+        spawnHeart();
+    </script>
+</body>
+</html>
